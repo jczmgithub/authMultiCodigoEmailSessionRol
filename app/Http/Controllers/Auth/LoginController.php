@@ -20,6 +20,9 @@ class LoginController extends Controller
 
     use AuthenticatesUsers;
 
+    //Add protected variable:
+    protected $activationService;
+
     /**
      * Where to redirect users after login.
      *
@@ -32,8 +35,20 @@ class LoginController extends Controller
      *
      * @return void
      */
-    public function __construct()
+    //modify `__construct()`:
+    public function __construct(ActivationService $activationService)
     {
-        $this->middleware('guest')->except('logout');
+        $this->middleware('guest', ['except' => 'logout']);
+        $this->activationService = $activationService;
+    }
+
+    //Add method `activateUser()`:
+    public function activateUser($token)
+    {
+        if ($user = $this->activationService->activateUser($token)) {
+            auth()->login($user);
+            return redirect($this->redirectPath());
+        }
+        abort(404);
     }
 }

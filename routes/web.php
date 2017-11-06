@@ -19,3 +19,4 @@ Route::prefix('admin')->group(function() {
     Route::post('/login', 'Auth\AdminLoginController@login')->name('admin.login.submit');
     Route::get('/', 'AdminController@index')->name('admin.dashboard');
 });
+Route::get('user/activation/{token}', 'Auth\LoginController@activateUser')->name('user.activate');
