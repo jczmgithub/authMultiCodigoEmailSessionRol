@@ -32,12 +32,10 @@ trait RegistersUsers
 
         event(new Registered($user = $this->create($request->all())));
 
-        //$this->guard()->login($user);
-        $this->activationService->sendActivationMail($user);
+        $this->guard()->login($user);
 
-        //return $this->registered($request, $user)
-        //                ?: redirect($this->redirectPath());
-        return redirect('/login')->with('status', 'We sent you an activation code. Check your email.');
+        return $this->registered($request, $user)
+                        ?: redirect($this->redirectPath());
     }
 
     /**
